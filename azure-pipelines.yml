@@ -13,7 +13,7 @@ variables:
   phpVersion: 7.4
   imageName: 'laravel.latest'
   containerRegistry: 'devopstestdemo.azurecr.io'
-  dockerfilePath: ''$(Build.SourcesDirectory)/app/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/app/Dockerfile'
 
 steps:
 - script: |
