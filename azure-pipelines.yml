@@ -28,6 +28,11 @@ steps:
     composer fund
   displayName: 'composer install'
 
+- script: |
+    php artisan key:generate
+    php artisan config:cache
+  displayName: 'Applying Key'
+
 - script: phpunit
   displayName: 'Run tests with phpunit'
 
