@@ -28,7 +28,7 @@ steps:
     composer fund
   displayName: 'composer install'
 
-- script: ./phpunit
+- script: phpunit
   displayName: 'Run tests with phpunit'
 
 - task: ArchiveFiles@2
