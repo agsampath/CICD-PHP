@@ -24,6 +24,6 @@ steps:
   displayName: 'Use PHP version $(phpVersion)'
 
 - script: |
-    composer fund
     composer install --no-interaction --prefer-dist
+    composer fund
   displayName: 'composer install'
