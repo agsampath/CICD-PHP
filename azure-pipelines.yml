@@ -11,6 +11,9 @@ pool:
 
 variables:
   phpVersion: 7.4
+  imageName: 'laravel.latest'
+  containerRegistry: 'devopstestdemo.azurecr.io'
+  dockerfilePath: ''$(Build.SourcesDirectory)/app/Dockerfile'
 
 steps:
 - script: |
@@ -45,3 +48,11 @@ steps:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
     includeRootFolder: false
 - task: PublishBuildArtifacts@1
+
+- task: Docker@2
+  displayName: 'Building an Docker Image and push to CR'
+  inputs:
+    command: buildAndPush
+    repository: $(imageName)
+    dockerFile: $(dockerfilePath)
+    containerRegistry: $(containerRegistry)
