@@ -29,7 +29,7 @@ steps:
   displayName: 'composer install'
 
 - script: |
-    cp .env.travis .env
+    cp .env.example .env
   displayName: 'Environment Setup'
 
 - script: |
