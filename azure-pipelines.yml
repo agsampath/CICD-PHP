@@ -29,6 +29,10 @@ steps:
   displayName: 'composer install'
 
 - script: |
+    cp .env.travis .env
+  displayName: 'Environment Setup'
+
+- script: |
     php artisan key:generate
     php artisan config:cache
   displayName: 'Applying Key'
