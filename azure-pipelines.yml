@@ -11,9 +11,11 @@ pool:
 
 variables:
   phpVersion: 7.4
+  dockerRegistryServiceConnection: '47309da5-b28a-4ac0-837c-7e53e3c84145'
   imageName: 'laravel.latest'
   containerRegistry: 'devopstestdemo.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/app/Dockerfile'
+  tag: '$(Build.BuildId)'
 
 steps:
 - script: |
@@ -56,3 +58,5 @@ steps:
     repository: $(imageName)
     dockerFile: $(dockerfilePath)
     containerRegistry: $(containerRegistry)
+    tags: |
+          $(tag)
