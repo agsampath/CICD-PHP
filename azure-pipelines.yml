@@ -51,6 +51,9 @@ steps:
     includeRootFolder: false
 - task: PublishBuildArtifacts@1
 
+- script: ls -l '$(system.defaultWorkingDirectory)'
+  displayName: 'list the files'
+
 - task: Docker@2
   displayName: 'Building an Docker Image and push to CR'
   inputs:
