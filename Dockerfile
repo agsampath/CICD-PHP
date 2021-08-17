@@ -3,7 +3,8 @@ RUN apt-get update -y && apt-get install -y openssl zip unzip git curl
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN docker-php-ext-install pdo
 WORKDIR /app
-COPY /home/vsts/work/1/s /app
+COPY composer.json ./
+COPY . .
 RUN composer install
 RUN composer fund
 
