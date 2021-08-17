@@ -52,8 +52,9 @@ steps:
 - task: PublishBuildArtifacts@1
 
 - script: |
-    ls -l '$(system.defaultWorkingDirectory)'
+    echo $(system.defaultWorkingDirectory)
     echo $(pwd)
+    ls -l $(pwd)
   displayName: 'list the files'
 
 - task: Docker@2
