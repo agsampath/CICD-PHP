@@ -60,6 +60,9 @@ steps:
 - task: Docker@2
   displayName: 'Building an Docker Image and push to CR'
   inputs:
-    command: build
+    command: buildAndPush
     repository: $(imageName)
     dockerFile: $(dockerfilePath)
+    containerRegistry: $(containerRegistry)
+    tags: |
+          $(tag)
