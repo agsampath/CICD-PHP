@@ -14,7 +14,8 @@ variables:
   imageRepository: 'agsampathcicdphp'
   containerRegistry: 'laravelphp.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(Build.BuildId)'
+  tag: 'latest'
+  phpVersion: 7.4
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
