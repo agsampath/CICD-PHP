@@ -12,8 +12,8 @@ pool:
 variables:
   phpVersion: 7.4
   dockerRegistryServiceConnection: '47309da5-b28a-4ac0-837c-7e53e3c84145'
-  imageName: 'laravel.latest'
-  containerRegistry: 'devopstestdemo.azurecr.io'
+  imageRepository: 'laravelphp'
+  containerRegistry: 'laravelphp.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
@@ -33,36 +33,24 @@ steps:
     composer fund
   displayName: 'composer install'
 
-- script: |
-    cp .env.example .env
-  displayName: 'Environment Setup'
-
-- script: |
-    php artisan key:generate
-    php artisan config:cache
-  displayName: 'Applying Key'
-
 - script: phpunit
   displayName: 'Run tests with phpunit'
-
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(system.defaultWorkingDirectory)'
-    includeRootFolder: false
-- task: PublishBuildArtifacts@1
-
-- script: |
-    echo $(system.defaultWorkingDirectory)
-    echo $(pwd)
-    ls -l $(pwd)
-  displayName: 'list the files'
-
-- task: Docker@2
-  displayName: 'Building an Docker Image and push to CR'
-  inputs:
-    command: buildAndPush
-    repository: $(imageName)
-    dockerFile: $(dockerfilePath)
-    containerRegistry: $(containerRegistry)
-    tags: |
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
           $(tag)
+
