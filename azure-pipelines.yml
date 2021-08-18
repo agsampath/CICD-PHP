@@ -41,6 +41,11 @@ stages:
           sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
           sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
           php -version
+    - task: Bash@3
+      displayName: 'Run tests with phpunit'
+      inputs:
+         targetType: inline
+         script: phpunit
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
