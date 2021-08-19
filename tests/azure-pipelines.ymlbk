@@ -1,0 +1,68 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  phpVersion: 7.4
+  dockerRegistryServiceConnection: '47309da5-b28a-4ac0-837c-7e53e3c84145'
+  imageName: 'laravel.latest'
+  containerRegistry: 'devopstestdemo.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+steps:
+- script: |
+    sudo update-alternatives --list php
+    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+    php -version
+  displayName: 'Use PHP version $(phpVersion)'
+
+- script: |
+    composer install --no-interaction --prefer-dist
+    composer fund
+  displayName: 'composer install'
+
+- script: |
+    cp .env.example .env
+  displayName: 'Environment Setup'
+
+- script: |
+    php artisan key:generate
+    php artisan config:cache
+  displayName: 'Applying Key'
+
+- script: phpunit
+  displayName: 'Run tests with phpunit'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(system.defaultWorkingDirectory)'
+    includeRootFolder: false
+- task: PublishBuildArtifacts@1
+
+- script: |
+    echo $(system.defaultWorkingDirectory)
+    echo $(pwd)
+    ls -l $(pwd)
+  displayName: 'list the files'
+
+- task: Docker@2
+  displayName: 'Building an Docker Image and push to CR'
+  inputs:
+    command: buildAndPush
+    repository: $(imageName)
+    dockerFile: $(dockerfilePath)
+    containerRegistry: $(containerRegistry)
+    tags: |
+          $(tag)
