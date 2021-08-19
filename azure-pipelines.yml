@@ -12,7 +12,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '3f5a248e-3944-4fcc-a20e-5ed8d13dbe6a'
   imageRepository: 'laravel'
-  containerRegistry: 'laravelphp.azurecr.io'
+  containerRegistry: 'laravelcicd.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: 'latest'
 
